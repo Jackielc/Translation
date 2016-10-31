@@ -70,8 +70,7 @@ static inline NSString * AFImageCacheKeyFromURLRequest(NSURLRequest *request) {
 
 `NSURLCache`
 ---
-`AFNetworking`使用了`NSURLConnection`，它利用了iOS原生的缓存机制，并且`NSURLCache`缓存了服务器返回的`NSURLRespone`对象。`NSURLCache` 的`shareCache`方法是默认开启的，你可以利用它来获取每一个`NSURLConnection`对象的URL内容。
-   让人很难过的是，它的默认配置是缓存到内存而且并没有写入到磁盘。为了tame the beast(驯服野兽？不太懂)，增加可持续性，你可以在`AppDelegate`中简单地声明一个共享的`NSURLCache`对象，像这样：
+`AFNetworking`使用了`NSURLConnection`，它利用了iOS原生的缓存机制，并且`NSURLCache`缓存了服务器返回的`NSURLRespone`对象。`NSURLCache` 的`shareCache`方法是默认开启的，你可以利用它来获取每一个`NSURLConnection`对象的URL内容。让人不爽的是，它的默认配置是缓存到内存而且并没有写入到磁盘。为了tame the beast(驯服野兽？不太懂)，增加可持续性，你可以在`AppDelegate`中简单地声明一个共享的`NSURLCache`对象，像这样：
 ```objective-c
 NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 1024
                                               diskCapacity:100 * 1024 * 1024
@@ -94,7 +93,7 @@ NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 
 用`NSURLCache`缓存数据到磁盘
 ---
 ###Cache-Control HTTP Header
-  `Cache-Controlheader`或`Expires header`存在于服务器返回的`HTTP response header`中，来用于客户端的缓存工作(前者优先级要高于后者)，这里面有很多地方需要注意,`Cache-Control`可以拥有被定义为类似`max-age`的参数（在更新响应之前要缓存多长时间), public/private 访问或者是`non－cache`(不缓存响应数据),[这里](http://blog.csdn.net/zhaokaiqiang1992)对`HTTP cache headers`进行了很好的介绍
+  `Cache-Controlheader`或`Expires header`存在于服务器返回的`HTTP response header`中，来用于客户端的缓存工作(前者优先级要高于后者)，这里面有很多地方需要注意,`Cache-Control`可以拥有被定义为类似`max-age`的参数（在更新响应之前要缓存多长时间), public/private 访问或者是`non－cache`(不缓存响应数据),[这里](http://blog.csdn.net/zhaokaiqiang1992)对`HTTP cache headers`进行了很好的介绍。
   
 ###继承并控制`NSURLCache`
   如果你想跳过`Cache-Control`,并且想要自己来制定规则读写一个带有`NSURLResponse`对象的`NSURLCache`,你可以继承`NSURLCache`。下面有个例子,使用 `CACHE_EXPIRES`来判断在获取源数据之前对缓存数据保留多长时间.(感谢 Mattt Thompson的[回复](https://twitter.com/mattt/status/444538735838134272))
