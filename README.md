@@ -1,5 +1,5 @@
 
-《AFNetWorking是如何进行缓存的？之AFImageCache & NSURLCache 详解》
+AFNetWorking是如何进行缓存的？之AFImageCache & NSURLCache 详解
 ===
 [原文－Tim Brandt《How Does Caching Work in AFNetworking? : AFImageCache & NSUrlCache Explained》](http://blog.originate.com/blog/2014/02/20/afimagecache-vs-nsurlcache/)
    
