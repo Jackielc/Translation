@@ -97,7 +97,7 @@ NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 
 ###Cache-Control HTTP Header
   `Cache-Controlheader`和`Expires header`两者中必须要有一个存在于服务器返回的`HTTP response header`中，来用于客户端的缓存工作(前者优先级要高于后者)，这里面有很多地方需要注意,`Cache-Control`可以拥有被定义为类似`max-age`的参数（在更新响应之前要缓存多长时间), public/private 访问或者是`non－cache`(不缓存响应数据),[这里](http://blog.csdn.net/zhaokaiqiang1992)对`HTTP cache headers`进行了很好的介绍
   
-###继承`NSURLCache`进行根本控制
+###继承和控制`NSURLCache`
   如果你想跳过`Cache-Control`,并且想要自己来制定规则读写一个带有`NSURLResponse`对象的`NSURLCache`,你可以继承`NSURLCache`。下面有个例子,使用 `CACHE_EXPIRES`来判断在获取源数据之前对缓存数据保留多长时间.(感谢 Mattt Thompson的[回复](https://twitter.com/mattt/status/444538735838134272))
  ```objective-c
  @interface CustomURLCache : NSURLCache
