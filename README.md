@@ -12,7 +12,7 @@ AFImageCache是如何工作的？
 `AFImageCache`属于`UIImageView+AFNetworking`的一部分,继承于`NSCache`,以URL(从`NSURLRequest`对象中获取)字符串作为key值来存储`UIImage`对象。
 `AFImageCache`的定义如下：(这里我们声明了一个2M内存、100M磁盘空间的`NSURLCache`对象。)
 
-```
+```objective-c
 @interface AFImageCache : NSCache <AFImageCache>
 
 // singleton instantiation :
