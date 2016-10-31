@@ -66,7 +66,7 @@ static inline NSString * AFImageCacheKeyFromURLRequest(NSURLRequest *request) {
     }
 }
 ```
-`AFImageCache`是`NSCache`的私有实现，它把所有可访问的`UIImage`对象存入`NSCache`中，并控制着`UIImage`对象应该在何时释放，如果`UIImage`对象释放的时候你希望去做一些监听操作，你可以实现`NSCacheDelegate`的 `cache:willEvictObject` 代理方法。[Matt Thompson](https://github.com/mattt)已经谦虚的告诉我在AFNetworking2.1版本中可通过`setSharedImageCache`方法来配置`AFImageCache`，这里是 AFN2.2.1中的`UIImageView+AFNetworking`文档。
+`AFImageCache`是`NSCache`的私有实现，它把所有可访问的`UIImage`对象存入`NSCache`中，并控制着`UIImage`对象应该在何时释放，如果`UIImage`对象释放的时候你希望去做一些监听操作，你可以实现`NSCacheDelegate`的 `cache:willEvictObject` 代理方法。[Matt Thompson](https://github.com/mattt)已经谦虚的告诉我在AFNetworking2.1版本中可通过`setSharedImageCache`方法来配置`AFImageCache`，[这里](http://cocoadocs.org/docsets/AFNetworking/2.2.1/Categories/UIImageView+AFNetworking.html#//api/name/setSharedImageCache)是 AFN2.2.1中的`UIImageView+AFNetworking`文档。
 
 `NSURLCache`
 ---
