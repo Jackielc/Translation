@@ -94,3 +94,94 @@ NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 
   
 ###继承NSURLCache进行根本控制
   如果你想绕过`Cache-Control`,并且想要自己来制定规则读写一个带有`NSURLResponse`对象的`NSURLCache`,你可以继承`NSURLCache`。下面有个例子,使用 `CACHE_EXPIRES`来判断在获取源数据之前对缓存数据保留多长时间.(感谢 Mattt Thompson的[回复](https://twitter.com/mattt/status/444538735838134272))
+ ```objective-c
+ @interface CustomURLCache : NSURLCache
+
+static NSString * const CustomURLCacheExpirationKey = @"CustomURLCacheExpiration";
+static NSTimeInterval const CustomURLCacheExpirationInterval = 600;
+
+@implementation CustomURLCache
+
++ (instancetype)standardURLCache {
+    static CustomURLCache *_standardURLCache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _standardURLCache = [[CustomURLCache alloc]
+                                 initWithMemoryCapacity:(2 * 1024 * 1024)
+                                 diskCapacity:(100 * 1024 * 1024)
+                                 diskPath:nil];
+    }
+
+    return _standardURLCache;
+}
+
+#pragma mark - NSURLCache
+
+- (NSCachedURLResponse *)cachedResponseForRequest:(NSURLRequest *)request {
+    NSCachedURLResponse *cachedResponse = [super cachedResponseForRequest:request];
+
+    if (cachedResponse) {
+        NSDate* cacheDate = cachedResponse.userInfo[CustomURLCacheExpirationKey];
+        NSDate* cacheExpirationDate = [cacheDate dateByAddingTimeInterval:CustomURLCacheExpirationInterval];
+        if ([cacheExpirationDate compare:[NSDate date]] == NSOrderedAscending) {
+            [self removeCachedResponseForRequest:request];
+            return nil;
+        }
+    }
+}
+
+    return cachedResponse;
+}
+
+- (void)storeCachedResponse:(NSCachedURLResponse *)cachedResponse
+                 forRequest:(NSURLRequest *)request
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:cachedResponse.userInfo];
+    userInfo[CustomURLCacheExpirationKey] = [NSDate date];
+
+    NSCachedURLResponse *modifiedCachedResponse = [[NSCachedURLResponse alloc] initWithResponse:cachedResponse.response data:cachedResponse.data userInfo:userInfo storagePolicy:cachedResponse.storagePolicy];
+
+    [super storeCachedResponse:modifiedCachedResponse forRequest:request];
+}
+@end
+```
+现在你有了属于自己的NSURLCachede子类，不要忘了在AppDelegate中初始化并且使用它。
+
+###在缓存之前重写NSURLResponse
+  -connection:willCacheResponse 代理方法是在被缓存之前用于截断和编辑由NSURLConnection创建的NSURLCacheResponse的地方。
+对NSURLCacheResponse进行处理并返回一个可变的拷贝对象(代码来自[NSHipster blog](http://nshipster.com/nsurlcache/))
+```objective-c
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    NSMutableDictionary *mutableUserInfo = [[cachedResponse userInfo] mutableCopy];
+    NSMutableData *mutableData = [[cachedResponse data] mutableCopy];
+    NSURLCacheStoragePolicy storagePolicy = NSURLCacheStorageAllowedInMemoryOnly;
+
+    // ...
+
+    return [[NSCachedURLResponse alloc] initWithResponse:[cachedResponse response]
+                                                    data:mutableData
+                                                userInfo:mutableUserInfo
+                                           storagePolicy:storagePolicy];
+}
+
+// If you do not wish to cache the NSURLCachedResponse, just return nil from the delegate function:
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    return nil;
+}
+```
+###禁用NSURLCache
+   不想使用NSURLCache?不为所动？好吧，你可以禁用NSURLCache，只需要将内存和磁盘空间设置为0就行了.
+```objective-c
+NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
+                                              diskCapacity:0
+                                              diskPath:nil];
+[NSURLCache setSharedURLCache:sharedCache];
+```
+总结
+---
+  我写这篇博客的目的是为iOS社区贡献绵薄之力，并总结了我是如何来处理关于 AFNetworking缓存问题的。我们有个内部App在加载了大量图片后，出现了内存和性能问题，而我的主要职责是诊断这个App的缓存行为，在研究过程中，我在网上搜索了很多资料并且做了很多调试，在我总结之后就写到了这篇博客中,我希望这篇文章可以为开发者使用AFNetworking时提供一些帮助，真心希望对你们有用！
+
+
