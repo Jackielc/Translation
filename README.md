@@ -77,17 +77,17 @@ NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 
 
 设置NSURLRequest对象的缓存策略
 ---
- NSURLCache 将对每一个NSURLRequest对象遵守缓存策略(NSURLRequestCachePolicy)，策略如下所示：
+ `NSURLCache` 将对每一个`NSURLRequest`对象遵守缓存策略(`NSURLRequestCachePolicy`)，策略如下所示：
 
 ```objective-c
-- NSURLRequestUseProtocolCachePolicy                                    默认的缓存策略，对特定的URL请求使用网络协议中实现的缓存逻辑
-- NSURLRequestReloadIgnoringLocalCacheData                      忽略本地缓存，重新请请求
-- NSURLRequestReloadIgnoringLocalAndRemoteCacheData  忽略本地和远程缓存，重新请求
-- NSURLRequestReturnCacheDataElseLoad                                有缓存则从中加载，如果没有则去请求
-- NSURLRequestReturnCacheDataDontLoad                              无网络状态下不去请求，一直加载本地缓存数据无论其是否存在
-- NSURLRequestReloadRevalidatingCacheData                         默从原始地址确认缓存数据的合法性之后，缓存数据才可使用，否则请求原始地址
+- NSURLRequestUseProtocolCachePolicy                默认的缓存策略，对特定的URL请求使用网络协议中实现的缓存逻辑
+- NSURLRequestReloadIgnoringLocalCacheData          忽略本地缓存，重新请请求
+- NSURLRequestReloadIgnoringLocalAndRemoteCacheData 忽略本地和远程缓存，重新请求
+- NSURLRequestReturnCacheDataElseLoad               有缓存则从中加载，如果没有则去请求
+- NSURLRequestReturnCacheDataDontLoad               无网络状态下不去请求，一直加载本地缓存数据无论其是否存在
+- NSURLRequestReloadRevalidatingCacheData           默从原始地址确认缓存数据的合法性之后，缓存数据才可使用，否则请求原始地址
 ```
 用NSURLCache缓存数据到磁盘
 ---
 ###Cache-Control HTTP Header
-  Cache-Controlheader和Expires header两者中必须要有一个存在于服务器返回的 HTTP response header 中，来用于客户端的缓存工作(前者优先级要高于后者)，这里面有很多地方需要注意，Cache-Control可以拥有被定义为类似max-age的参数（在更新响应之前要缓存多长时间),public/private访问或者是non－cache(不缓存响应数据)，这里对HTTP cache headers进行了很好的介绍
+  `Cache-Controlheader`和`Expires header`两者中必须要有一个存在于服务器返回的`HTTP response header`中，来用于客户端的缓存工作(前者优先级要高于后者)，这里面有很多地方需要注意,`Cache-Control`可以拥有被定义为类似`max-age`的参数（在更新响应之前要缓存多长时间),public/private访问或者是non－cache(不缓存响应数据)， [这里](http://blog.csdn.net/zhaokaiqiang1992)对HTTP cache headers`进行了很好的介绍
