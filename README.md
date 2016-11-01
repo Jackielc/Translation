@@ -8,8 +8,8 @@ AFNetWorking是如何进行数据缓存的?之AFImageCache & NSURLCache 详解
 `AFNetworking`实际上利用了两套单独的缓存机制:
 ---
 
-1. `AFImagecache` : 继承于`NSCache`，`AFNetworking`的图片内存缓存的类。
-2. `NSURLCache`   : `NSURLConnection`的默认缓存机制，用于存储`NSURLResponse`对象：一个默认缓存在内存，并且可以通过一些配置操作可以持久缓存到磁盘的类。
+1. `AFImagecache` : 继承于`NSCache`,`AFNetworking`的图片内存缓存的类.
+2. `NSURLCache`   : `NSURLConnection`的默认缓存机制,用于存储`NSURLResponse`对象:一个默认缓存在内存,并且可以通过一些配置操作可以持久缓存到磁盘的类.
 
 `AFImageCache`是如何工作的?
 ---
