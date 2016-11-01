@@ -83,12 +83,12 @@ NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 
  `NSURLCache` 将对每一个`NSURLRequest`对象遵守缓存策略(`NSURLRequestCachePolicy`)，策略如下所示:
 
 ```objective-c
-- NSURLRequestUseProtocolCachePolicy                //默认的缓存策略，对特定的URL请求使用网络协议中实现的缓存逻辑
-- NSURLRequestReloadIgnoringLocalCacheData          //忽略本地缓存，重新请请求
-- NSURLRequestReloadIgnoringLocalAndRemoteCacheData //忽略本地和远程缓存，重新请求
-- NSURLRequestReturnCacheDataElseLoad               //有缓存则从中加载，如果没有则去请求
-- NSURLRequestReturnCacheDataDontLoad               //无网络状态下不去请求，一直加载本地缓存数据无论其是否存在
-- NSURLRequestReloadRevalidatingCacheData           //默从原始地址确认缓存数据的合法性之后，缓存数据才可使用，否则请求原始地址
+ NSURLRequestUseProtocolCachePolicy                //默认的缓存策略，对特定的URL请求使用网络协议中实现的缓存逻辑
+ NSURLRequestReloadIgnoringLocalCacheData          //忽略本地缓存，重新请请求
+ NSURLRequestReloadIgnoringLocalAndRemoteCacheData //忽略本地和远程缓存，重新请求
+ NSURLRequestReturnCacheDataElseLoad               //有缓存则从中加载，如果没有则去请求
+ NSURLRequestReturnCacheDataDontLoad               //无网络状态下不去请求，一直加载本地缓存数据无论其是否存在
+ NSURLRequestReloadRevalidatingCacheData           //默从原始地址确认缓存数据的合法性之后，缓存数据才可使用，否则请求原始地址
 ```
 用`NSURLCache`缓存数据到磁盘
 ---
